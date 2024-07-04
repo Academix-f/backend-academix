@@ -58,7 +58,10 @@ def login(request):
     if user and user.check_password(password):
         serializer = MyUserSerializer(instance=user)
         token, create = Token.objects.get_or_create(user=user)
-        serializer_copy = serializer.data
+        if serializer:
+            serializer_copy = serializer.data
+        else:
+            serializer_copy = {}
 
         if user.is_staff:
             serializer_copy['admin'] = AdminSerializer(instance=user.admin).data

@@ -13,8 +13,11 @@ class MyUserSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         department = Department.objects.filter(id = instance.department)
 
-        ret['department_name'] = department.name
-
+        if department:
+            ret['department_name'] = department.name
+      
+        return ret
+    
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student

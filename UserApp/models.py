@@ -12,6 +12,7 @@ class MyUser(AbstractUser):
     telegram = models.CharField(max_length=20 , null=True)
     linkedin = models.CharField(max_length=20 , null=True)
     instagram = models.CharField(max_length=20 , null=True)
+    department = models.ForeignKey('BasicApp.Department', null=True, on_delete=models.SET_NULL, related_name='myuser') ##
 
 
 class Student(models.Model):
