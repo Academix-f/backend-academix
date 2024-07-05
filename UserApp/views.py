@@ -9,22 +9,26 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from django.db.models import Q
 from CommunityApp.models import Section
-
+from BasicApp.models import Department
 
 @api_view(['POST'])
 def signUp(request):
     '''student signup route'''
 
     fields = set(['student_id', 'academic_year', 'semester', 'department', 'section'])
-
+    
+    if(not Department.objects.filter(id = request.data['department'])):
+        fields.remove('department')
+    
+    
     hashmap = {key: value for key, value in request.data.items() if key not in fields}
     newMap = {key: value for key, value in request.data.items() if key in fields}
-
+   
     serializer = MyUserSerializer(data=hashmap)
     student = StudentSerializer(data=newMap)
 
     newMap.pop('section')
-
+    
     if serializer.is_valid() and student.is_valid():
         user = serializer.save()
         student1 = student.save()
